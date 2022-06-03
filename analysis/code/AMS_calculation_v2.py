@@ -6,6 +6,7 @@ from HNLAnalysis_etautau import HNLAnalysis_etautau
 from HNLAnalysis_mutautau import HNLAnalysis_mutautau
 from array import array
 
+path_to_results = "/afs/cern.ch/user/l/lmollier/git_PDM/analysis/results/"
 
 ###
 #return the list of the cuts with the ams score
@@ -48,57 +49,107 @@ def best_var_ams_score(e):
 def compute_ams_for_HNLmass(HNL_mass, signs, variables, name_file, output_file, rebining):
     print("AMS analysis for HNL mass : " + HNL_mass + " (" + signs+")")
     var_ams = []
-    
     HNL_scale = {
-        "HNL100": 0.6,
-        "HNL125": 0.3,
-        "HNL150": 0.1,
-        "HNL200": 0.1,
-        "HNL250": 0.1,
-        "HNL300": 0.07,
-        "HNL350": 0.03,
-        "HNL400": 0.025,
-        "HNL450": 0.025,
-        "HNL500": 0.02,
-        "HNL600": 0.01,
-        "HNL700": 0.0075,
-        "HNL800": 0.006,
-        "HNL900": 0.004,
+        "HNL100":1. ,
+        "HNL125": 1. ,
+        "HNL150":1. ,
+        "HNL200":1. ,
+        "HNL250":1. ,
+        "HNL300":1. ,
+        "HNL350": 1. ,
+        "HNL400": 1. ,
+        "HNL450": 1. ,
+        "HNL500": 1. ,
+        "HNL600": 1. ,
+        "HNL700": 1. ,
+        "HNL800": 1. ,
+        "HNL900": 1. ,
         }
     if("etautau" in name_file):
          HNL_scale = {
-        "HNL100": 0.3,
-        "HNL125": 0.15,
-        "HNL150": 0.1,
-        "HNL200": 0.05,
-        "HNL250": 0.03,
-        "HNL300": 0.02,
-        "HNL350": 0.015,
-        "HNL400": 0.01,
-        "HNL450": 0.01,
-        "HNL500": 0.0075,
-        "HNL600": 0.006,
-        "HNL700": 0.004,
-        "HNL800": 0.003,
-        "HNL900": 0.0025,
+        "HNL100": 1. ,
+        "HNL125": 1. ,
+        "HNL150": 1. ,
+        "HNL200": 1. ,
+        "HNL250": 1. ,
+        "HNL300": 1. ,
+        "HNL350": 1. ,
+        "HNL400": 1. ,
+        "HNL450": 1. ,
+        "HNL500": 1. ,
+        "HNL600": 1. ,
+        "HNL700": 1. ,
+        "HNL800": 1. ,
+        "HNL900": 1. ,
         }
     elif("mutautau" in name_file):
         HNL_scale = {
-        "HNL100": 0.25,
-        "HNL125": 0.15,
-        "HNL150": 0.1,
-        "HNL200": 0.04,
-        "HNL250": 0.025,
-        "HNL300": 0.015,
-        "HNL350": 0.01,
-        "HNL400": 0.01,
-        "HNL450": 0.007,
-        "HNL500": 0.005,
-        "HNL600": 0.003,
-        "HNL700": 0.002,
-        "HNL800": 0.0015,
-        "HNL900": 0.001,
+        "HNL100": 1. ,
+        "HNL125": 1. ,
+        "HNL150": 1. ,
+        "HNL200": 1. ,
+        "HNL250": 1. ,
+        "HNL300": 1. ,
+        "HNL350": 1. ,
+        "HNL400": 1. ,
+        "HNL450": 1. ,
+        "HNL500": 1. ,
+        "HNL600": 1. ,
+        "HNL700": 1. ,
+        "HNL800": 1. ,
+        "HNL900": 1. ,
         }
+    
+    # HNL_scale = {
+    #     "HNL100": 0.14,
+    #     "HNL125": 0.075,
+    #     "HNL150": 0.05,
+    #     "HNL200": 0.03,
+    #     "HNL250": 0.02,
+    #     "HNL300": 0.01,
+    #     "HNL350": 0.0075,
+    #     "HNL400": 0.007,
+    #     "HNL450": 0.005,
+    #     "HNL500": 0.0035,
+    #     "HNL600": 0.0025,
+    #     "HNL700": 0.002,
+    #     "HNL800": 0.0015,
+    #     "HNL900": 0.001,
+    #     }
+    # if("etautau" in name_file):
+    #      HNL_scale = {
+    #     "HNL100": 0.075,
+    #     "HNL125": 0.025,
+    #     "HNL150": 0.02,
+    #     "HNL200": 0.0075,
+    #     "HNL250": 0.004,
+    #     "HNL300": 0.0035,
+    #     "HNL350": 0.002,
+    #     "HNL400": 0.002,
+    #     "HNL450": 0.0015,
+    #     "HNL500": 0.0013,
+    #     "HNL600": 0.00075,
+    #     "HNL700": 0.0006,
+    #     "HNL800": 0.0005,
+    #     "HNL900": 0.0005,
+    #     }
+    # elif("mutautau" in name_file):
+    #     HNL_scale = {
+    #     "HNL100": 0.06,
+    #     "HNL125": 0.04,
+    #     "HNL150": 0.02,
+    #     "HNL200": 0.01,
+    #     "HNL250": 0.005,
+    #     "HNL300": 0.005,
+    #     "HNL350": 0.002,
+    #     "HNL400": 0.002,
+    #     "HNL450": 0.0015,
+    #     "HNL500": 0.0015,
+    #     "HNL600": 0.0011,
+    #     "HNL700": 0.0008,
+    #     "HNL800": 0.0006,
+    #     "HNL900": 0.0005,
+    #     }
     
     for var in variables:
         
@@ -185,10 +236,10 @@ def AMS_calculation_v2(tag, rebining):
                 variables.append(v[0])
 
     #tag = '220504_bck_HNL_v1'
-    name_file = 'histograms_output_'+tag+'.root'
-    name_file = 'histograms_output_'+tag+"_rebin_"+str(rebining)+'.root'
+    name_file = path_to_results+'histograms_output_'+tag+'.root'
+    name_file = path_to_results+'histograms_output_'+tag+"_rebin_"+str(rebining)+'.root'
     print("file analysed : " + name_file)
-    output_file = 'ams_v2_output_'+tag+"_rebin_"+str(rebining)+'.root'
+    output_file = path_to_results+'ams_v2_output_'+tag+"_rebin_"+str(rebining)+'.root'
     f_out = TFile(output_file, "RECREATE")
     f_out.Close()
 
@@ -347,7 +398,7 @@ def AMS_calculation_v2(tag, rebining):
         print(u'\u2500' * 74)
         
 
-    name_txt_file_output  = 'ams_v2_output_'+tag+"rebin_"+str(rebining)+'.txt'
+    name_txt_file_output  = path_to_results+'ams_v2_output_'+tag+"rebin_"+str(rebining)+'.txt'
     with open(name_txt_file_output, 'w') as f:
         f.write("Here are the best ams to make for each HNL mass. \nThe histograms can be found in the root file called : " + output_file + " \n")
         for i in range(0, len(list_mass_vs_best_ams_first)):
@@ -373,7 +424,7 @@ def AMS_calculation_v2(tag, rebining):
 
         
         
-    name_txt_file_output_for_run  = 'best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
+    name_txt_file_output_for_run  = path_to_results+'best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
     with open(name_txt_file_output_for_run, 'w') as f:
         f.write("HNL mass \t")
         f.write("ams score\n")
@@ -385,7 +436,7 @@ def AMS_calculation_v2(tag, rebining):
             ams =str(list_mass_vs_best_ams_first[i][1])+"\t"
             f.write(ams)       
 
-    name_txt_file_output_second_for_run  = 'second_best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
+    name_txt_file_output_second_for_run  = path_to_results+'second_best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
     with open(name_txt_file_output_second_for_run, 'w') as f:
         f.write("HNL mass \t")
         f.write("ams score\n")
@@ -397,7 +448,7 @@ def AMS_calculation_v2(tag, rebining):
             ams =str(list_mass_vs_best_ams_second[i][1])+"\t"
             f.write(ams)
 
-    name_txt_file_output_third_for_run  = 'third_best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
+    name_txt_file_output_third_for_run  = path_to_results+'third_best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
     with open(name_txt_file_output_third_for_run, 'w') as f:
         f.write("HNL mass \t")
         f.write("ams score\n")
@@ -410,7 +461,7 @@ def AMS_calculation_v2(tag, rebining):
             f.write(ams)
 
 
-    name_txt_file_output_fourth_for_run  = 'fourth_best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
+    name_txt_file_output_fourth_for_run  = path_to_results+'fourth_best_ams_v2_'+tag+"rebin_"+str(rebining)+'.txt'
     with open(name_txt_file_output_fourth_for_run, 'w') as f:
         f.write("HNL mass \t")
         f.write("ams score\n")

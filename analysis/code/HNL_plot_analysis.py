@@ -18,6 +18,7 @@ from HNLAnalysis_mutautau import HNLAnalysis_mutautau
 from ROOT import TFile, TH1D, THStack,kGreen,kAzure, kCyan,kMagenta,kRed, kBlack,kBlue, TCanvas, TLegend, gPad, gStyle, kRainBow, gSystem, kIsland, kGistEarth,TColor, kViridis,kOrange,kTeal, kPink,kSpring,kViolet
 from cycler import cycler
 import warnings
+path_to_results = "/afs/cern.ch/user/l/lmollier/git_PDM/analysis/results/"
 
 
 
@@ -25,39 +26,52 @@ def HNL_plot_analysis(tag, rebining):
     # Read in reults from coffea run
     #tag = 'bck_WZ_ZZ_TT_tighter_sel_electron'
     #tag = '220505_bck_HNL_v1'
-
-    with open(f'result_{tag}.pkl', 'rb') as f:
+    path = "/afs/cern.ch/user/l/lmollier/git_PDM/analysis/output_process_data/"
+    with open( path+'result_'+tag+'.pkl', 'rb') as f:
         result = pickle.load(f)
-    with open (f'counter_{tag}.pkl', 'rb') as f:
+    with open (path+'counter_'+tag+'.pkl', 'rb') as f:
         event_counter = pickle.load(f)
 
     print("Results are downloaded!")
-    name_root_output_final = 'histograms_output_'+tag+"_rebin_"+str(rebining)+'.root'
+    name_root_output_final = path_to_results+'histograms_output_'+tag+"_rebin_"+str(rebining)+'.root'
     fout_output = TFile(name_root_output_final, "RECREATE")
     fout_output.Close()
     print("root file for output is create under name : " + name_root_output_final)
     # Lumi and cross sections for plotting
     xsecs = { # pb
         #HNL
-        #"HNL85": 1.,
-        "HNL100":1.,
-        "HNL125":1.,
-        "HNL150":1.,
-        "HNL200":1.,
-        "HNL250":1.,
-        "HNL300":1.,
-        "HNL350":1.,
-        "HNL400":1.,
-        "HNL450":1.,
-        "HNL500":1.,
-        "HNL600":1.,
-        "HNL700":1.,
-        "HNL800":1.,
-        "HNL900":1.,
-        #"HNL1000":1.,
+        
+        # "HNL100": 0.75,
+        # "HNL125": 0.25,
+        # "HNL150": 0.2,
+        # "HNL200": 0.075,
+        # "HNL250": 0.04,
+        # "HNL300": 0.035,
+        # "HNL350": 0.02,
+        # "HNL400": 0.02,
+        # "HNL450": 0.015,
+        # "HNL500": 0.013,
+        # "HNL600": 0.0075,
+        # "HNL700": 0.006,
+        # "HNL800": 0.005,
+        # "HNL900": 0.005,
+        "HNL100": 0.001,
+        "HNL125": 0.001,
+        "HNL150": 0.001,
+        "HNL200": 0.001,
+        "HNL250": 0.001,
+        "HNL300": 0.001,
+        "HNL350": 0.001,
+        "HNL400": 0.001,
+        "HNL450": 0.001,
+        "HNL500": 0.001,
+        "HNL600": 0.001,
+        "HNL700": 0.001,
+        "HNL800": 0.001,
+        "HNL900": 0.001,
 
         ##Drell-Yann
-        'DYJets_To_LL_M_50_madgraphMLM': 5398.0,
+        'DYJets_To_LL_M_50_madgraphMLM': 6077.2,
         #'DYJets_To_LL_M_50_amcatnloFXFX:': 6404.0,
         #'DY1Jets_To_LL_M_50' : 928.3,
         # 'DY2Jets_To_LL_M_50' : 293.6,
@@ -69,9 +83,9 @@ def HNL_plot_analysis(tag, rebining):
         'EWK_WPlus2Jets_W_To_LNu_M_50':39.05,
         'EWK_Z2Jets_Z_To_LL_M_50':6.215,
         #TTbar
-        'TT_To_2L2Nu':687.1,
-        'TT_To_SemiLeptonic':687.1,
-        'TT_To_Hadronic':687.1,
+        'TT_To_2L2Nu':88.29,
+        'TT_To_SemiLeptonic':365.34,
+        'TT_To_Hadronic':377.96,
         # #SingleTop
         'ST_tW_antitop_5f_inclusiveDecays':34.97,
         'ST_tW_top_5f_inclusiveDecays':34.91,
@@ -86,7 +100,7 @@ def HNL_plot_analysis(tag, rebining):
         #DiBoson
         #'ZZ':12.17,
         'ZZ_To_4L':1.325,
-        'ZZ_To_2L2Nu':0.9738,
+        'ZZ_To_2L2Nu':0.6008,
         #'WW':75.95,
         'WW_To_2L2Nu':11.09,
         #'WZ':27.59,
@@ -100,10 +114,14 @@ def HNL_plot_analysis(tag, rebining):
 
 
         #Tribosons
-        "WWW_4F": 0.00001,
-        "ZZZ": 0.00001,
-        "WZZ": 0.00001,
-        "WWZ_4F":0.00001,
+        "WWW_4F": 0.2086,
+        "ZZZ": 0.01398,
+        "WZZ":0.05565,
+        "WWZ_4F":0.1651,
+        # "WWW_4F": 0.00001,
+        # "ZZZ": 0.00001,
+        # "WZZ": 0.00001,
+        # "WWZ_4F":0.00001,
 
 
         # #DATA
@@ -135,20 +153,20 @@ def HNL_plot_analysis(tag, rebining):
     plot_scale = {
         #HNL
         #"HNL85": 1.,
-        "HNL100":10.,
-        "HNL125":10.,
-        "HNL150":10.,
-        "HNL200":10.,
-        "HNL250":10.,
-        "HNL300":10.,
-        "HNL350":10.,
-        "HNL400":10.,
-        "HNL450":10.,
-        "HNL500":10.,
-        "HNL600":10.,
-        "HNL700":10.,
-        "HNL800":10.,
-        "HNL900":10.,
+        "HNL100":1.,
+        "HNL125":1.,
+        "HNL150":1.,
+        "HNL200":1.,
+        "HNL250":1.,
+        "HNL300":1.,
+        "HNL350":1.,
+        "HNL400":1.,
+        "HNL450":1.,
+        "HNL500":1.,
+        "HNL600":1.,
+        "HNL700":1.,
+        "HNL800":1.,
+        "HNL900":1.,
         #"HNL1000":1.,
 
         #Drell-Yann
@@ -257,7 +275,7 @@ def HNL_plot_analysis(tag, rebining):
             warnings.filterwarnings("ignore")
             
             #loop over all histogram of bck
-            name_root_output = 'bck_and_HNL_'+tag+"_"+ var+"_rebin_"+str(rebining)+'.root'
+            name_root_output = path_to_results+'bck_and_HNL_'+tag+"_"+ var+"_rebin_"+str(rebining)+'.root'
             fout = uproot3.recreate(name_root_output )
             print("\tStack of background is made and HNL root TH1D are made...")
             for d in result[var].axis("ds").identifiers():

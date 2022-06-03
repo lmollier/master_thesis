@@ -157,7 +157,7 @@ class HNLAnalysis_mutautau(processor.ProcessorABC):
         match1 = ak.any(muon1.jetIdx == electron1.jetIdx, axis=-1, mask_identity=False)
         notinjet1 = ak.any(muon1.jetIdx == -1) 
         events['SelMuon'] = events.SelMuon[(~(match1))]    
-        events['SelTau'] = events.Tau[(events.Tau.pt > 20.) & (abs(events.Tau.eta) < 2.3)& (events.Tau.idDeepTau2017v2p1VSmu >=4) & (events.Tau.idDeepTau2017v2p1VSe >= 0.5) & (events.Tau.idDeepTau2017v2p1VSjet >=32)]
+        events['SelTau'] = events.Tau[(events.Tau.pt > 20.) & (abs(events.Tau.eta) < 2.3)& (events.Tau.idDeepTau2017v2p1VSmu >=2) & (events.Tau.idDeepTau2017v2p1VSe >= 0.5) & (events.Tau.idDeepTau2017v2p1VSjet >=32)]
         tau2, electron2 = ak.unzip(ak.cartesian([events.SelTau, events.SelElectron], nested=True))
         match2 = ak.any(tau2.jetIdx == electron2.jetIdx, axis=-1, mask_identity=False)
         tau3, muon3 = ak.unzip(ak.cartesian([events.SelTau, events.SelMuon], nested=True))
@@ -174,7 +174,7 @@ class HNLAnalysis_mutautau(processor.ProcessorABC):
         
         
         
-        events = self.jet_veto_selection(events)
+        #events = self.jet_veto_selection(events)
         out['sumw_jet_veto'][ds] += ak.sum(events.genWeight)
         events = self.bjet_veto(events)
         out['sumw_bjet_veto'][ds] += ak.sum(events.genWeight)

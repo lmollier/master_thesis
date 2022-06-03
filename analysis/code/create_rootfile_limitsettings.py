@@ -1,24 +1,24 @@
 from cmath import inf
 from xxlimited import new
-from ROOT import TFile
+from ROOT import TFile, gSystem
 import math
 import array as arr
 print("started")
 
 
-
+path_to_results = "/afs/cern.ch/user/l/lmollier/git_PDM/analysis/results/"
 
 #emutau_ss
-input_file_emutau_SS =  "histograms_output_220505_optimize_IDwp_run_13_rebin_10.root"
-f_in = TFile(input_file_emutau_SS, "READ")
+input_file_emutau = path_to_results+ "histograms_output_220505_optimize_IDwp_run_12_rebin_5.root"
+f_in = TFile(input_file_emutau, "READ")
 
-output_filename_temp = "rootfile_limit_setting_temp.root"
+output_filename_temp =  path_to_results+ "rootfile_limit_setting_temp_v2.root"
 f_temp = TFile(output_filename_temp, "RECREATE")
 f_temp.mkdir("emutau_SS/")
 f_temp.cd("emutau_SS/")
 f_temp.Close()
 
-output_filename = "rootfile_limit_setting.root"
+output_filename =  path_to_results+ "rootfile_limit_setting_v2.root"
 f_out = TFile(output_filename, "RECREATE")
 f_out.mkdir("emutau_SS/")
 f_out.cd("emutau_SS/")
@@ -26,8 +26,8 @@ f_out.Close()
 
 
 
-
-variables_emutau = ["MT_total_emutau_SS","transverse_mass_etau_emutau_SS","transverse_mass_mutau_emutau_SS", "pt_sum_emutau_emutau_SS"]
+print(">>> emutau_SS")
+variables_emutau = ["MT_total_emutau_SS","pt_sum_emutau_emutau_SS","comb_mass_mutau_emutau_SS", "mass_tau_1_emutau_SS"]
 HNL_mass_list = [100,125,150,200,250,300,350,400,450,500,600,700,800,900]
 f_temp = TFile(output_filename_temp, "UPDATE")
 for var in variables_emutau:
@@ -47,8 +47,10 @@ for var in variables_emutau:
     curr_maxbin = h_bck_rare.FindLastBinAbove()
     cut = curr_maxbin
     all_process.append(new_name)
+    h_bck_rare.SetBinContent(h_bck_rare.GetNbinsX(),h_bck_rare.GetBinContent(h_bck_rare.GetNbinsX())+h_bck_rare.GetBinContent(1+h_bck_rare.GetNbinsX())) #adding the overflow bin to the last bin
+    h_bck_rare.SetBinContent(h_bck_rare.GetNbinsX()+1,0) #remove the overflow bin (=0)
     h_bck_rare.Write()
-    print("rare is written")
+    #print("rare is written")
     name_histo_bck_reducible = var+"/output/Reducible"
     h_bck_reducible= f_in.Get(name_histo_bck_reducible)
     new_name = "Reducible"
@@ -57,8 +59,10 @@ for var in variables_emutau:
     curr_maxbin = h_bck_reducible.FindLastBinAbove()
     cut = curr_maxbin
     all_process.append(new_name)
+    h_bck_reducible.SetBinContent(h_bck_reducible.GetNbinsX(),h_bck_reducible.GetBinContent(h_bck_reducible.GetNbinsX())+h_bck_reducible.GetBinContent(1+h_bck_reducible.GetNbinsX())) #adding the overflow bin to the last bin
+    h_bck_reducible.SetBinContent(h_bck_reducible.GetNbinsX()+1,0) #remove the overflow bin (=0)
     h_bck_reducible.Write()
-    print("red. is written")
+    #print("red. is written")
 
     name_histo_data_obs = var+"/output/h_all_bck_"+var
     h_bck_data_obs= f_in.Get(name_histo_data_obs)
@@ -68,8 +72,10 @@ for var in variables_emutau:
     curr_maxbin = h_bck_data_obs.FindLastBinAbove()
     cut = curr_maxbin
     all_process.append(new_name)
+    h_bck_data_obs.SetBinContent(h_bck_data_obs.GetNbinsX(),h_bck_data_obs.GetBinContent(h_bck_data_obs.GetNbinsX())+h_bck_data_obs.GetBinContent(1+h_bck_data_obs.GetNbinsX())) #adding the overflow bin to the last bin
+    h_bck_data_obs.SetBinContent(h_bck_data_obs.GetNbinsX()+1,0) #remove the overflow bin (=0)
     h_bck_data_obs.Write()
-    print("data obs is written") 
+    #print("data obs is written") 
     all_process_for_binning.append(new_name)
 
     name_histo_bck_WZ = var+"/output/WZ_To_3L"
@@ -80,8 +86,10 @@ for var in variables_emutau:
     curr_maxbin = h_bck_WZ.FindLastBinAbove()
     cut = curr_maxbin
     all_process.append(new_name)
+    h_bck_WZ.SetBinContent(h_bck_WZ.GetNbinsX(),h_bck_WZ.GetBinContent(h_bck_WZ.GetNbinsX())+h_bck_WZ.GetBinContent(1+h_bck_WZ.GetNbinsX())) #adding the overflow bin to the last bin
+    h_bck_WZ.SetBinContent(h_bck_WZ.GetNbinsX()+1,0) #remove the overflow bin (=0)    
     h_bck_WZ.Write()
-    print("WZ is written")
+    #print("WZ is written")
 
     name_histo_bck_ZZ = var+"/output/ZZ_To_4L"
     h_bck_ZZ= f_in.Get(name_histo_bck_ZZ)
@@ -91,8 +99,10 @@ for var in variables_emutau:
     curr_maxbin = h_bck_ZZ.FindLastBinAbove()
     cut = curr_maxbin
     all_process.append(new_name)
+    h_bck_ZZ.SetBinContent(h_bck_ZZ.GetNbinsX(),h_bck_ZZ.GetBinContent(h_bck_ZZ.GetNbinsX())+h_bck_ZZ.GetBinContent(1+h_bck_ZZ.GetNbinsX())) #adding the overflow bin to the last bin
+    h_bck_ZZ.SetBinContent(h_bck_ZZ.GetNbinsX()+1,0) #remove the overflow bin (=0)    
     h_bck_ZZ.Write()
-    print("ZZ is written")
+    #print("ZZ is written")
 
 
     for HNL_mass in HNL_mass_list:
@@ -107,8 +117,10 @@ for var in variables_emutau:
         curr_maxbin = h_sig.FindLastBinAbove()
         if(curr_maxbin<cut):
             cut = curr_maxbin
+        h_sig.SetBinContent(h_sig.GetNbinsX(),h_sig.GetBinContent(h_sig.GetNbinsX())+h_sig.GetBinContent(1+h_sig.GetNbinsX())) #adding the overflow bin to the last bin
+        h_sig.SetBinContent(h_sig.GetNbinsX()+1,0) #remove the overflow bin (=0)  
         h_sig.Write()
-        print("one sig is written")
+        #print("one sig is written")
 
         all_process.append(new_name)
         #all_process_for_binning.append(new_name)
@@ -124,12 +136,11 @@ for var in variables_emutau:
     #     h.SetBins(nx, xmin, xmax)
     #     h.Write()
     # print("histograms are cut")
-    print("THe histograms are not cut")
+    print("The histograms are not cut")
     i = h_sig.GetNbinsX()
     # f_out = TFile(output_filename, "UPDATE")
     # f_out.cd("emutau_SS/")
     while(i>1):
-        print("i = "+ str(i))
         redo_binning = False
         for process in all_process_for_binning:
             h = f_temp.Get("emutau_SS/"+temp+"/"+process)
@@ -182,18 +193,16 @@ f_temp.Close()
 
 
 
+print(">>> emutau_OS")
 
 #emutau_OS
-input_file_emutau_OS =  "histograms_output_220505_optimize_IDwp_run_13_rebin_10.root"
-f_in = TFile(input_file_emutau_OS, "READ")
+f_in = TFile(input_file_emutau, "READ")
 
-output_filename_temp = "rootfile_limit_setting_temp.root"
 f_temp = TFile(output_filename_temp, "UPDATE")
 f_temp.mkdir("emutau_OS/")
 f_temp.cd("emutau_OS/")
 f_temp.Close()
 
-output_filename = "rootfile_limit_setting.root"
 f_out = TFile(output_filename, "UPDATE")
 f_out.mkdir("emutau_OS/")
 f_out.cd("emutau_OS/")
@@ -201,7 +210,7 @@ f_out.Close()
 
 
 
-variables_emutau = ["pt_sum_mutau_emutau_OS","comb_mass_emu_emutau_OS","MT_total_emutau_OS","pt_tau_1_emutau_OS"]
+variables_emutau = ["transverse_mass_etau_emutau_OS","dr_emu_emutau_OS","MT_total_emutau_OS","pt_tau_1_emutau_OS"]
 
 HNL_mass_list = [100,125,150,200,250,300,350,400,450,500,600,700,800,900]
 f_temp = TFile(output_filename_temp, "UPDATE")
@@ -223,7 +232,7 @@ for var in variables_emutau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_rare.Write()
-    print("rare is written")
+    #print("rare is written")
     name_histo_bck_reducible = var+"/output/Reducible"
     h_bck_reducible= f_in.Get(name_histo_bck_reducible)
     new_name = "Reducible"
@@ -233,7 +242,7 @@ for var in variables_emutau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_reducible.Write()
-    print("red. is written")
+    #print("red. is written")
 
     name_histo_data_obs = var+"/output/h_all_bck_"+var
     h_bck_data_obs= f_in.Get(name_histo_data_obs)
@@ -244,7 +253,7 @@ for var in variables_emutau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_data_obs.Write()
-    print("data obs is written") 
+    #print("data obs is written") 
     all_process_for_binning.append(new_name)
 
     name_histo_bck_WZ = var+"/output/WZ_To_3L"
@@ -256,7 +265,7 @@ for var in variables_emutau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_WZ.Write()
-    print("WZ is written")
+    #print("WZ is written")
 
     name_histo_bck_ZZ = var+"/output/ZZ_To_4L"
     h_bck_ZZ= f_in.Get(name_histo_bck_ZZ)
@@ -267,7 +276,7 @@ for var in variables_emutau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_ZZ.Write()
-    print("ZZ is written")
+    #print("ZZ is written")
 
 
     for HNL_mass in HNL_mass_list:
@@ -283,7 +292,7 @@ for var in variables_emutau:
         if(curr_maxbin<cut):
             cut = curr_maxbin
         h_sig.Write()
-        print("one sig is written")
+        #print("one sig is written")
 
         all_process.append(new_name)
         #all_process_for_binning.append(new_name)
@@ -299,12 +308,11 @@ for var in variables_emutau:
     #     h.SetBins(nx, xmin, xmax)
     #     h.Write()
     # print("histograms are cut")
-    print("THe histograms are not cut")
+    print("The histograms are not cut")
     i = h_sig.GetNbinsX()
     # f_out = TFile(output_filename, "UPDATE")
     # f_out.cd("emutau_SS/")
     while(i>1):
-        print("i = "+ str(i))
         redo_binning = False
         for process in all_process_for_binning:
             h = f_temp.Get("emutau_OS/"+temp+"/"+process)
@@ -345,18 +353,17 @@ f_temp.Close()
 
 
 
+print(">>> etautau")
 
 #etautau
-input_file_etautau =  "histograms_output_220509_optimize_IDwp_etautau_run_9_rebin_10.root"
+input_file_etautau =  path_to_results+  "histograms_output_220509_optimize_IDwp_etautau_run_9_rebin_5.root"
 f_in = TFile(input_file_etautau, "READ")
 
-output_filename_temp = "rootfile_limit_setting_temp.root"
 f_temp = TFile(output_filename_temp, "UPDATE")
 f_temp.mkdir("etautau/")
 f_temp.cd("etautau/")
 f_temp.Close()
 
-output_filename = "rootfile_limit_setting.root"
 f_out = TFile(output_filename, "UPDATE")
 f_out.mkdir("etautau/")
 f_out.cd("etautau/")
@@ -364,7 +371,7 @@ f_out.Close()
 
 
 
-variables_etautau = ["pt_sum_tau2tau_etautau","transverse_mass_tau2tau_etautau","dphi_tau2tau_etautau","MT_total_etautau"]
+variables_etautau = ["pt_sum_etauMET_etautau","transverse_mass_tau2tau_etautau","dr_etau2_etautau","MT_total_etautau"]
 HNL_mass_list = [100,125,150,200,250,300,350,400,450,500,600,700,800,900]
 f_temp = TFile(output_filename_temp, "UPDATE")
 for var in variables_etautau:
@@ -385,7 +392,7 @@ for var in variables_etautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_rare.Write()
-    print("rare is written")
+    #print("rare is written")
     name_histo_bck_reducible = var+"/output/Reducible"
     h_bck_reducible= f_in.Get(name_histo_bck_reducible)
     new_name = "Reducible"
@@ -395,7 +402,7 @@ for var in variables_etautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_reducible.Write()
-    print("red. is written")
+    #print("red. is written")
 
     name_histo_data_obs = var+"/output/h_all_bck_"+var
     h_bck_data_obs= f_in.Get(name_histo_data_obs)
@@ -406,7 +413,7 @@ for var in variables_etautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_data_obs.Write()
-    print("data obs is written") 
+    #print("data obs is written") 
     all_process_for_binning.append(new_name)
 
     name_histo_bck_WZ = var+"/output/WZ_To_3L"
@@ -418,7 +425,7 @@ for var in variables_etautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_WZ.Write()
-    print("WZ is written")
+    #print("WZ is written")
 
     name_histo_bck_ZZ = var+"/output/ZZ_To_4L"
     h_bck_ZZ= f_in.Get(name_histo_bck_ZZ)
@@ -429,7 +436,7 @@ for var in variables_etautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_ZZ.Write()
-    print("ZZ is written")
+    #print("ZZ is written")
 
 
     for HNL_mass in HNL_mass_list:
@@ -445,7 +452,7 @@ for var in variables_etautau:
         if(curr_maxbin<cut):
             cut = curr_maxbin
         h_sig.Write()
-        print("one sig is written")
+        #print("one sig is written")
 
         all_process.append(new_name)
         #all_process_for_binning.append(new_name)
@@ -461,12 +468,11 @@ for var in variables_etautau:
     #     h.SetBins(nx, xmin, xmax)
     #     h.Write()
     # print("histograms are cut")
-    print("THe histograms are not cut")
+    print("The histograms are not cut")
     i = h_sig.GetNbinsX()
     # f_out = TFile(output_filename, "UPDATE")
     # f_out.cd("emutau_SS/")
     while(i>1):
-        print("i = "+ str(i))
         redo_binning = False
         for process in all_process_for_binning:
             h = f_temp.Get("etautau/"+temp+"/"+process)
@@ -504,18 +510,16 @@ f_temp.Close()
 
 
 
-
+print(">>> mutautau")
 #mutautau
-input_file_mutautau =  "histograms_output_220510_optimize_IDwp_mutautau_run_1_rebin_10.root"
+input_file_mutautau =  path_to_results+  "histograms_output_220510_optimize_IDwp_mutautau_run_3_rebin_5.root"
 f_in = TFile(input_file_mutautau, "READ")
 
-output_filename_temp = "rootfile_limit_setting_temp.root"
 f_temp = TFile(output_filename_temp, "UPDATE")
 f_temp.mkdir("mutautau/")
-f_temp.cd("mutautauS/")
+f_temp.cd("mutautau/")
 f_temp.Close()
 
-output_filename = "rootfile_limit_setting.root"
 f_out = TFile(output_filename, "UPDATE")
 f_out.mkdir("mutautau/")
 f_out.cd("mutautau/")
@@ -544,7 +548,7 @@ for var in variables_mutautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_rare.Write()
-    print("rare is written")
+    #print("rare is written")
     name_histo_bck_reducible = var+"/output/Reducible"
     h_bck_reducible= f_in.Get(name_histo_bck_reducible)
     new_name = "Reducible"
@@ -554,7 +558,7 @@ for var in variables_mutautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_reducible.Write()
-    print("red. is written")
+    #print("red. is written")
 
     name_histo_data_obs = var+"/output/h_all_bck_"+var
     h_bck_data_obs= f_in.Get(name_histo_data_obs)
@@ -565,7 +569,7 @@ for var in variables_mutautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_data_obs.Write()
-    print("data obs is written") 
+    #print("data obs is written") 
     all_process_for_binning.append(new_name)
 
     name_histo_bck_WZ = var+"/output/WZ_To_3L"
@@ -577,7 +581,7 @@ for var in variables_mutautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_WZ.Write()
-    print("WZ is written")
+    #print("WZ is written")
 
     name_histo_bck_ZZ = var+"/output/ZZ_To_4L"
     h_bck_ZZ= f_in.Get(name_histo_bck_ZZ)
@@ -588,7 +592,7 @@ for var in variables_mutautau:
     cut = curr_maxbin
     all_process.append(new_name)
     h_bck_ZZ.Write()
-    print("ZZ is written")
+    #print("ZZ is written")
 
 
     for HNL_mass in HNL_mass_list:
@@ -604,7 +608,7 @@ for var in variables_mutautau:
         if(curr_maxbin<cut):
             cut = curr_maxbin
         h_sig.Write()
-        print("one sig is written")
+        #print("one sig is written")
 
         all_process.append(new_name)
         #all_process_for_binning.append(new_name)
@@ -620,12 +624,11 @@ for var in variables_mutautau:
     #     h.SetBins(nx, xmin, xmax)
     #     h.Write()
     # print("histograms are cut")
-    print("THe histograms are not cut")
+    print("The histograms are not cut")
     i = h_sig.GetNbinsX()
     # f_out = TFile(output_filename, "UPDATE")
     # f_out.cd("emutau_SS/")
     while(i>1):
-        print("i = "+ str(i))
         redo_binning = False
         for process in all_process_for_binning:
             h = f_temp.Get("mutautau/"+temp+"/"+process)
@@ -661,9 +664,10 @@ for var in variables_mutautau:
     f_out.Close()  
 f_temp.Close()  
 
-
-
-
+# command_to_copy_rootfile = "cp /afs/cern.ch/user/l/lmollier/git_PDM/analysis/results/rootfile_limit_setting_v2.root /afs/cern.ch/user/l/lmollier/git_PDM/analysis/limit_setting/CMSSW_10_2_13/src/HNL/"
+# gSystem.Exec("rm  /afs/cern.ch/user/l/lmollier/git_PDM/analysis/limit_setting/CMSSW_10_2_13/src/HNL/rootfile_limit_setting.root")
+# gSystem.Exec(command_to_copy_rootfile)
+print("File created. \n>>>DONE")
 
 # #emutau_os
 # input_file_emutau_OS =  "histograms_output_220505_optimize_IDwp_run_13_rebin_10.root"
